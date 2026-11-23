@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Footprint // Malfoid Leaks</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#070b09;--bg-2:#0b110e;--panel:#0e1612;--line:#1b2a22;
+    --text:#c9d6cf;--muted:#6f847a;--accent:#00ff9c;--accent-dim:#00b86e;
+    --warn:#ffb020;--danger:#ff4d5e;
+    --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;overflow-x:hidden}
+  body::after{content:"";position:fixed;inset:0;z-index:50;pointer-events:none;
+    background:repeating-linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.12) 3px)}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+
+  header{border-bottom:1px solid var(--line);background:rgba(7,11,9,.9)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .logo{font-family:var(--mono);font-weight:700;letter-spacing:.08em;color:var(--accent);display:flex;align-items:center;gap:10px}
+  .logo i{width:10px;height:10px;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 2s infinite}
+  @keyframes pulse{50%{opacity:.35}}
+  .actions{display:flex;gap:10px;flex-wrap:wrap}
+  .btn{font-family:var(--mono);font-size:12.5px;padding:8px 14px;border-radius:6px;border:1px solid var(--line);
+    background:var(--panel);color:var(--text);cursor:pointer;transition:.2s}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.on{border-color:var(--accent);color:var(--accent);background:rgba(0,255,156,.08)}
+
+  .hero{padding:48px 0 28px}
+  .badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--warn);
+    border:1px solid rgba(255,176,32,.35);background:rgba(255,176,32,.06);padding:6px 12px;border-radius:999px;margin-bottom:20px}
+  h1{font-family:var(--mono);font-size:clamp(28px,5vw,46px);line-height:1.1;color:#eafff5;letter-spacing:-.02em}
+  h1 span{color:var(--accent);text-shadow:0 0 24px rgba(0,255,156,.35)}
+  .lead{color:var(--muted);max-width:640px;margin-top:14px}
+
+  .ipbox{margin:30px 0 8px;padding:22px 24px;background:linear-gradient(180deg,var(--panel),var(--bg-2));
+    border:1px solid rgba(0,255,156,.4);border-radius:10px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+  .ipbox small{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--muted)}
+  .ipbox .ip{font-family:var(--mono);font-size:clamp(24px,4.5vw,40px);font-weight:700;color:var(--accent);text-shadow:0 0 18px rgba(0,255,156,.3);word-break:break-all}
+  .ipbox .where{font-family:var(--mono);font-size:14px;color:var(--text);text-align:right}
+  .count{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin:10px 0 28px}
+  .count b{color:var(--accent)}
+
+  .term{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;font-family:var(--mono);font-size:12.5px;margin-bottom:28px}
+  .term-bar{display:flex;gap:7px;align-items:center;padding:9px 14px;border-bottom:1px solid var(--line);background:var(--bg-2)}
+  .term-bar i{width:9px;height:9px;border-radius:50%;background:#26382e}
+  .term-bar em{margin-left:auto;font-style:normal;color:var(--muted);font-size:11px}
+  #log{padding:14px 16px;min-height:96px;white-space:pre-wrap;color:var(--muted)}
+  #log .ok{color:var(--accent)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:18px}
+  .panel{background:linear-gradient(180deg,var(--panel),var(--bg-2));border:1px solid var(--line);border-radius:10px;padding:20px 22px}
+  .panel h2{font-family:var(--mono);font-size:14px;color:var(--accent);letter-spacing:.06em;margin-bottom:4px}
+  .panel h2::before{content:"// ";color:var(--accent-dim)}
+  .panel .sub{font-size:12.5px;color:var(--muted);margin-bottom:12px}
+  .row{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-top:1px dashed var(--line);
+    font-family:var(--mono);font-size:12.5px;opacity:0;animation:in .4s forwards}
+  @keyframes in{to{opacity:1}}
+  .k{color:var(--muted);flex:0 0 38%}
+  .val{color:var(--text);text-align:right;word-break:break-word;transition:filter .2s}
+  body.hide .val,body.hide .ipbox .ip,body.hide .ipbox .where{filter:blur(7px);user-select:none}
+
+  .tips{margin-top:18px}
+  .tips ul{list-style:none;font-size:14px;color:var(--muted)}
+  .tips li{padding:6px 0}
+  .tips li::before{content:"[+] ";color:var(--accent);font-family:var(--mono)}
+  .note{margin:28px 0 56px;font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:8px;padding:14px 16px;background:var(--panel)}
+  .note b{color:var(--text)}
+
+  @media(max-width:520px){.grid{grid-template-columns:1fr}.k{flex-basis:42%}.ipbox .where{text-align:left}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.row{opacity:1}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <div class="logo"><i></i>MALFOID LEAKS</div>
+    <div class="actions">
+      <button class="btn" id="hideBtn" type="button">Hide values</button>
+      <button class="btn" id="rescan" type="button">Re-scan</button>
+      <button class="btn" id="closeBtn" type="button">Close</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <div class="badge">⚠ WHAT EVERY WEBSITE CAN SEE ABOUT YOU</div>
+    <h1>This is your <span>digital footprint</span>.</h1>
+    <p class="lead">Every site you open can read the details below the moment the page loads. No permission prompts, no hacking. It's just what a browser shares by default.</p>
+
+    <div class="ipbox">
+      <div>
+        <small>YOUR PUBLIC IP</small>
+        <div class="ip" id="ip">scanning…</div>
+      </div>
+      <div class="where" id="where">locating…</div>
+    </div>
+    <div class="count" id="count">Collecting data points…</div>
+
+    <div class="term" aria-hidden="true">
+      <div class="term-bar"><i></i><i></i><i></i><em>scan.log</em></div>
+      <div id="log"></div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <section class="panel"><h2>NETWORK</h2><p class="sub">Visible to every server you connect to.</p><div id="p-net"></div></section>
+    <section class="panel"><h2>LOCATION</h2><p class="sub">Narrowed down from your IP address, usually only ZIP-code accurate at best.</p><div id="p-loc"></div></section>
+    <section class="panel"><h2>DEVICE</h2><p class="sub">Readable by any page script.</p><div id="p-dev"></div></section>
+    <section class="panel"><h2>BROWSER</h2><p class="sub">Settings and preferences your browser reports.</p><div id="p-brw"></div></section>
+    <section class="panel"><h2>FINGERPRINT</h2><p class="sub">Combined traits that can single out your browser.</p><div id="p-fp"></div></section>
+
+    <section class="panel tips">
+      <h2>REDUCE YOUR EXPOSURE</h2>
+      <p class="sub">Simple steps that make a real difference.</p>
+      <ul>
+        <li>Use a trusted VPN or Tor to mask your IP address.</li>
+        <li>Try a privacy-focused browser or enable fingerprint protection.</li>
+        <li>Block third-party trackers and cookies.</li>
+        <li>Keep location, camera and microphone permissions off unless needed.</li>
+        <li>Keep your browser and OS updated.</li>
+      </ul>
+    </section>
+  </div>
+
+  <p class="note"><b>Privacy:</b> this page runs entirely in your browser. Nothing is stored or sent to us. The only outside request is a lookup to <b>ipwho.is</b>, a third-party service that turns your IP into an approximate location. IP-based location is usually city-level and often points to your provider, not your home.</p>
+</main>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const sleep = ms => new Promise(r=>setTimeout(r,ms));
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let runId = 0;
+
+  function setRows(id, rows, step){
+    const el = $(id); el.innerHTML = '';
+    rows.forEach(([k,v],i)=>{
+      const r = document.createElement('div'); r.className='row';
+      r.style.animationDelay = (reduce?0:i*(step!=null?step:55))+'ms';
+      const a = document.createElement('span'); a.className='k'; a.textContent=k;
+      const b = document.createElement('span'); b.className='val';
+      b.textContent = (v===undefined||v===null||v==='') ? 'Unavailable' : String(v);
+      r.append(a,b); el.append(r);
+    });
+    return rows.length;
+  }
+
+  function parseUA(ua){
+    let browser='Unknown', os='Unknown';
+    if(/Edg\//.test(ua)) browser='Edge ' + (ua.match(/Edg\/([\d.]+)/)||[])[1];
+    else if(/OPR\//.test(ua)) browser='Opera ' + (ua.match(/OPR\/([\d.]+)/)||[])[1];
+    else if(/Firefox\//.test(ua)) browser='Firefox ' + (ua.match(/Firefox\/([\d.]+)/)||[])[1];
+    else if(/Chrome\//.test(ua)) browser='Chrome ' + (ua.match(/Chrome\/([\d.]+)/)||[])[1];
+    else if(/Safari\//.test(ua)) browser='Safari ' + (ua.match(/Version\/([\d.]+)/)||[])[1];
+    if(/Windows NT/.test(ua)) os='Windows';
+    else if(/Android/.test(ua)) os='Android';
+    else if(/iPhone|iPad|iPod/.test(ua)) os='iOS';
+    else if(/Mac OS X/.test(ua)) os='macOS';
+    else if(/CrOS/.test(ua)) os='ChromeOS';
+    else if(/Linux/.test(ua)) os='Linux';
+    return {browser, os};
+  }
+
+  function gpu(){
+    try{
+      const c = document.createElement('canvas');
+      const gl = c.getContext('webgl') || c.getContext('experimental-webgl');
+      if(!gl) return null;
+      const ext = gl.getExtension('WEBGL_debug_renderer_info');
+      return ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
+    }catch(e){ return null; }
+  }
+
+  // small non-cryptographic hash (cyrb53)
+  function hash(str){
+    let h1=0xdeadbeef, h2=0x41c6ce57;
+    for(let i=0;i<str.length;i++){
+      const ch=str.charCodeAt(i);
+      h1=Math.imul(h1^ch,2654435761); h2=Math.imul(h2^ch,1597334677);
+    }
+    h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);
+    h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);
+    return (4294967296*(2097151&h2)+(h1>>>0)).toString(16).toUpperCase().padStart(14,'0');
+  }
+
+  function canvasPrint(){
+    try{
+      const c=document.createElement('canvas'); c.width=240; c.height=60;
+      const x=c.getContext('2d');
+      x.textBaseline='top'; x.font="16px 'Arial'"; x.fillStyle='#f60'; x.fillRect(100,2,60,24);
+      x.fillStyle='#069'; x.fillText('Malfoid footprint 🛰️',4,8);
+      x.fillStyle='rgba(102,204,0,.7)'; x.fillText('Malfoid footprint 🛰️',6,22);
+      return hash(c.toDataURL());
+    }catch(e){ return null; }
+  }
+
+  async function lookupIP(){
+    try{
+      const r = await fetch('https://ipwho.is/');
+      const j = await r.json();
+      if(j && j.success !== false && j.ip) return j;
+    }catch(e){}
+    try{
+      const r = await fetch('https://api.ipify.org?format=json');
+      const j = await r.json();
+      if(j && j.ip) return {ip:j.ip, partial:true};
+    }catch(e){}
+    return null;
+  }
+
+  async function revealPlace(parts, my){
+    const el = $('where');
+    const clean = parts.filter(Boolean);
+    if(!clean.length){ el.textContent = 'Location unavailable'; return; }
+    el.textContent = '';
+    for(let i=0;i<clean.length;i++){
+      if(my !== runId) return;
+      el.textContent = clean.slice(0,i+1).join('  ›  ');
+      if(!reduce && i<clean.length-1) await sleep(650);
+    }
+  }
+
+  function deviceRows(){
+    const ua = navigator.userAgent, p = parseUA(ua);
+    const uad = navigator.userAgentData;
+    return [
+      ['Browser', p.browser],
+      ['Operating system', (uad && uad.platform) ? uad.platform : p.os],
+      ['Platform string', navigator.platform],
+      ['Screen', screen.width+' × '+screen.height],
+      ['Window size', innerWidth+' × '+innerHeight],
+      ['Pixel ratio', window.devicePixelRatio],
+      ['Color depth', screen.colorDepth+'-bit'],
+      ['CPU threads', navigator.hardwareConcurrency],
+      ['Memory (approx.)', navigator.deviceMemory ? '≥ '+navigator.deviceMemory+' GB' : null],
+      ['Touch points', navigator.maxTouchPoints],
+      ['Graphics card', gpu()],
+      ['User agent', ua]
+    ];
+  }
+
+  function browserRows(){
+    const c = navigator.connection;
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const off = -new Date().getTimezoneOffset()/60;
+    return [
+      ['Language', navigator.language],
+      ['All languages', (navigator.languages||[]).join(', ')],
+      ['Time zone', tz],
+      ['UTC offset', 'UTC' + (off>=0?'+':'') + off],
+      ['Local time', new Date().toLocaleString()],
+      ['Cookies enabled', navigator.cookieEnabled ? 'Yes' : 'No'],
+      ['Do Not Track', navigator.doNotTrack==='1' ? 'On' : (navigator.doNotTrack==='0' ? 'Off' : 'Not set')],
+      ['Global Privacy Control', navigator.globalPrivacyControl===true ? 'On' : 'Not set'],
+      ['Connection', c ? (c.effectiveType||'') + (c.downlink ? ' · '+c.downlink+' Mbps' : '') + (c.rtt!=null ? ' · '+c.rtt+' ms' : '') : null],
+      ['Online', navigator.onLine ? 'Yes' : 'No'],
+      ['Dark mode', matchMedia('(prefers-color-scheme: dark)').matches ? 'Preferred' : 'Not preferred'],
+      ['Referrer', document.referrer || '(none / opened directly)'],
+      ['Pages in history', history.length]
+    ];
+  }
+
+  function fpRows(dev){
+    const cv = canvasPrint();
+    const combo = [navigator.userAgent, screen.width, screen.height, screen.colorDepth, navigator.hardwareConcurrency,
+      navigator.language, Intl.DateTimeFormat().resolvedOptions().timeZone, gpu(), cv].join('|');
+    return [
+      ['Canvas hash', cv],
+      ['Combined fingerprint ID', hash(combo)],
+      ['Why it matters', 'Stable across sessions, even without cookies']
+    ];
+  }
+
+  async function logLines(){
+    const log = $('log'); log.innerHTML='';
+    const steps = [
+      'reading connection details',
+      'resolving public IP address',
+      'estimating location from IP',
+      'reading browser and device properties',
+      'computing fingerprint'
+    ];
+    for(const s of steps){
+      const d = document.createElement('div');
+      d.innerHTML = '> ' + s + ' … <span class="ok">ok</span>';
+      log.append(d);
+      if(!reduce) await sleep(260);
+    }
+  }
+
+  async function run(){
+    const my = ++runId;
+    $('ip').textContent='scanning…'; $('where').textContent='locating…'; $('count').textContent='Collecting data points…';
+    ['p-net','p-loc','p-dev','p-brw','p-fp'].forEach(i=>$(i).innerHTML='');
+
+    const ipPromise = lookupIP();
+    await logLines();
+    const info = await ipPromise;
+    if(my !== runId) return;
+
+    let total = 0;
+    const dev = deviceRows();
+    total += setRows('p-dev', dev);
+    total += setRows('p-brw', browserRows());
+    total += setRows('p-fp', fpRows(dev));
+
+    if(info){
+      const conn = info.connection || {};
+      $('ip').textContent = info.ip;
+      revealPlace([info.continent, info.country, info.region, info.city], my);
+      total += setRows('p-net', [
+        ['Public IP', info.ip],
+        ['IP version', info.type || (info.ip.includes(':') ? 'IPv6' : 'IPv4')],
+        ['ISP', conn.isp],
+        ['Organization', conn.org],
+        ['ASN', conn.asn ? 'AS'+conn.asn : null],
+        ['Domain', conn.domain]
+      ]);
+      total += setRows('p-loc', [
+        ['Method', 'IP-based geolocation (no GPS, no permission)'],
+        ['Continent', info.continent],
+        ['Country', info.country ? info.country + (info.country_code ? ' ('+info.country_code+')' : '') : null],
+        ['Region', info.region],
+        ['City', info.city],
+        ['Postal code', info.postal],
+        ['Coordinates', (info.latitude!=null && info.longitude!=null) ? info.latitude.toFixed(3)+', '+info.longitude.toFixed(3) : null],
+        ['IP time zone', info.timezone && info.timezone.id]
+      ], 450);
+    } else {
+      $('ip').textContent = 'Unavailable';
+      $('where').textContent = 'Lookup blocked or offline';
+      total += setRows('p-net', [['Public IP', null],['Note','The IP lookup was blocked (ad-blocker, VPN or offline).']]);
+      total += setRows('p-loc', [['Location', null]]);
+    }
+    $('count').innerHTML = '<b>' + total + '</b> data points collected without asking you for anything.';
+  }
+
+  $('hideBtn').addEventListener('click', e=>{
+    document.body.classList.toggle('hide');
+    const on = document.body.classList.contains('hide');
+    e.currentTarget.classList.toggle('on', on);
+    e.currentTarget.textContent = on ? 'Show values' : 'Hide values';
+  });
+  $('rescan').addEventListener('click', run);
+  $('closeBtn').addEventListener('click', ()=>{
+    window.close();
+    setTimeout(()=>{ location.href='index.html'; }, 250);
+  });
+
+  try{ window.focus(); }catch(e){}
+  window.addEventListener('load',()=>{ try{ window.focus(); }catch(e){} });
+  run();
+})();
+</script>
+</body>
+</html>
