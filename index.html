@@ -354,16 +354,16 @@
 
 <script>
   // Placeholder links
-  const toast = document.getElementById('toast');
-  let t;
-  document.querySelectorAll('[data-placeholder]').forEach(a=>{
-    a.addEventListener('click',e=>{
-      e.preventDefault();
-      toast.classList.add('show');
-      clearTimeout(t);
-      t=setTimeout(()=>toast.classList.remove('show'),2200);
-    });
+document.querySelectorAll('[data-placeholder]').forEach(a=>{
+  const href = a.getAttribute('href');
+  if(href && href !== '#'){ a.target='_blank'; a.rel='noopener noreferrer'; return; }
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    toast.classList.add('show');
+    clearTimeout(t);
+    t=setTimeout(()=>toast.classList.remove('show'),2200);
   });
+});
 
   // Open the footprint page in its own window (in front), then start the download.
   // If the browser blocks pop-ups, fall back to opening it in this tab.
